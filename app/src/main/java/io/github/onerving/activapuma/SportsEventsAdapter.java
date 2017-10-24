@@ -13,7 +13,6 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 /**
  * Created by onerving on 20/10/17.
@@ -84,6 +83,7 @@ class SportsEventsAdapter
             Picasso.with(holder.mEventImage.getContext())
                     .load(imageUrl)
                     .fit()
+                    .centerCrop()
                     .into(holder.mEventImage);
 
         } catch (JSONException e) {
