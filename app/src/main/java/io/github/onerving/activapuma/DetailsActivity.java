@@ -1,29 +1,21 @@
 package io.github.onerving.activapuma;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.TimeZone;
 
 
@@ -36,18 +28,20 @@ public class DetailsActivity extends AppCompatActivity {
     private String mType;
     private String mDescription;
     private String mDate;
+    private String youtubeUrl = null;
     private double mLatitude;
     private double mLongitude;
 
-    private ImageView mBackgroundImage;
-    private TextView mEventTitle;
-    private TextView mEventDescription;
-    private TextView mEventType;
-    private TextView mDateTime;
-    private TextView mPlaceDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ImageView mBackgroundImage;
+        TextView mEventTitle;
+        TextView mEventDescription;
+        TextView mEventType;
+        TextView mDateTime;
+        TextView mPlaceDescription;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         try {
@@ -78,7 +72,7 @@ public class DetailsActivity extends AppCompatActivity {
 
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.locationFAB);
+        FloatingActionButton fab = findViewById(R.id.locationFAB);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,6 +83,18 @@ public class DetailsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        if(null !=  youtubeUrl){
+            FloatingActionButton fabYT = findViewById(R.id.youtubeFAB);
+            fabYT.setVisibility(View.VISIBLE);
+            fabYT.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeUrl));
+                    startActivity(intent);
+                }
+            });
+        }
 
     }
 
@@ -106,6 +112,10 @@ public class DetailsActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM, yyyy - HH:mm a");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT-6"));
         mDate = sdf.format(date);
+
+        if(mEventJsonData.has("video")){
+            youtubeUrl = mEventJsonData.getString("video");
+        }
     }
 
 
